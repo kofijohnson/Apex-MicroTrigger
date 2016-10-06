@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Active</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Criteria__c</fullName>
+        <externalId>false</externalId>
+        <label>Criteria</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Event__c</fullName>
+        <externalId>false</externalId>
+        <label>Event</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Before Insert</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>After Insert</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Before Update</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>After Update</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Before Delete</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>After Delete</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>After Undelete</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>OrderOfExecution__c</fullName>
+        <externalId>false</externalId>
+        <label>Order Of Execution</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>PreventRecursive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>When this field is checked, the MicroTrigger Actions will run only one</description>
+        <externalId>false</externalId>
+        <label>Prevent Recursive</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>SObject__c</fullName>
+        <externalId>false</externalId>
+        <label>SObject</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Account</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contact</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lead</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Case</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>MicroTriggerTestingMock__c</fullName>
+                <default>false</default>
+            </picklistValues>
+            <restrictedPicklist>true</restrictedPicklist>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <label>MicroTrigger</label>
+    <pluralLabel>MicroTriggers</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>
