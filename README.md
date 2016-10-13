@@ -11,6 +11,7 @@
 	- [Controling the MicroTriggers](#Controling-the-MicroTriggers)
 	- [Getting the MicroTrigger Execution Report](#Getting-the-MicroTrigger-Execution-Report)
 - [Author and Contributors](#Author-and-Contributors)
+- [Development Roadmap](#Roadmap)
 
 <a name="Apex-Microtrigger">	
 # Apex-Microtrigger
@@ -213,3 +214,13 @@ Author: [Kofi Johnson](https://github.com/kofijohnson)
 Contributor : [Sebastian Schepis] (https://github.com/sschepis)
 
 Apex MicroTrigger Framework is sponsored by [Figur8 Cloud Solutions](http://www.figur8.com).
+
+<a name="Roadmap">
+# Development Roadmap
+
+The following enhancements make up our immediate development roadmap.  If you have other features that you'd like to see placed on the roadmap, please contact us.
+
+1. 'Log execution' checkbox for MicroTrigger. When this flag is set to true, all invocation and execution of the MicroTrigger is logged to the system debug log.
+2. Custom MicroTrigger edit VisualForce page.  The standard Custom Metadata pages are clunky. A better UI for the management of MicroTriggers is needed.
+3. Automatic creation of Apex Trigger using Metadata API.  Use the Salesforce Metadata API to automatically create and install the base triggers needed for the framework to function.
+
