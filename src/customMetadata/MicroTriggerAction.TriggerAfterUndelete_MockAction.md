@@ -7,7 +7,7 @@
     </values>
     <values>
         <field>ApexClass__c</field>
-        <value xsi:type="xsd:string">TriggerAfterUndelete.MockAction</value>
+        <value xsi:type="xsd:string">TriggerAfterUndeleteTest.MockAction</value>
     </values>
     <values>
         <field>Description__c</field>
