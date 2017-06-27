@@ -13,10 +13,12 @@
 - [Author and Contributors](#Author-and-Contributors)
 - [Development Roadmap](#Development-Roadmap)
 
-<a name="Apex-Microtrigger">	
+<a name="Apex-Microtrigger">
+
 # Apex-Microtrigger
 
 <a name="What-is-it">
+
 ## What is it?
 
 A trigger framework for creating and managing Apex triggers that uses microservice concepts and a mixture of programmatic and declarative tools for trigger creation, assembly, and management.
@@ -28,6 +30,7 @@ Like a workflow, a MicroTrigger operates against an object type, in a specific e
 Unlike Workflows, MicroTrigger Criteria and Actions are programmatically built by developers, by implementing a Criteria interface for criterias, and an Action interface for actions.  
 
 <a name="Installing-the-Framework-in-your-organization">
+
 ## Installing the Framework in your organization
 
 MicroTrigger Framework can be deployed by clicking this button.
@@ -38,6 +41,7 @@ MicroTrigger Framework can be deployed by clicking this button.
 </a>
 
 <a name="How-do-I-create-a-MicroTrigger">
+
 # How do I create a MicroTrigger?
 
 There are three basic steps to creating a microtrigger:
@@ -47,6 +51,7 @@ There are three basic steps to creating a microtrigger:
 3. An administrator creates a MicroTrigger custom metadata record, and specifies the context, target object type, and criteria/action class names that implement the trigger’s functionality.
 
 <a name="Creating-Criterias">
+
 ## Creating Criterias
 
 To create a criteria, implement the Criteria interface for the Trigger execution context that the criteria will be operating within. Available trigger execution contexts include:
@@ -89,6 +94,7 @@ public class AccountOwnerIdChangedCritera implements TriggerBeforeUpdate.Criteri
 }
 ```
 <a name="Creating-Actions">
+
 ## Creating Actions
 
 To create a criteria, implement the Criteria interface for the Trigger execution context that the criteria will be operating within.   Available trigger execution contexts are the same as criteria.
@@ -138,6 +144,7 @@ public class ContactsChangeOwnerIdAction implements TriggerBeforeUpdate.Action {
 ```
 
 <a name="Creating-the-MicroTrigger-Metadata-Definition">
+
 ## Creating the MicroTrigger Metadata Definition
 
 Once you have your Criteria and your Action(s) implemented, it’s time to create the MicroTrigger metadata definition. The MicroTrigger metadata definition is the declarative ‘glue’ that binds the Criteria and Action(s) together and executes them when a record of your target object type is affected.
@@ -168,11 +175,13 @@ To create a MicroTrigger metadata definition:
 15. Congratulations - you’ve just created a MicroTrigger!
 
 <a name="How-do-I-manage-the-MicroTriggers">
+
 # How do I manage the MicroTriggers ?
 
 Business process changes. The framework gives you the ability to deactivate and change the order of the execution of the MicroTriggers or Actions of a MicroTriggers. It also gives an execution report of the MicroTriggers that run in a specific transaction.
 
 <a name="Controling-the-MicroTriggers">
+
 ## Controling the MicroTriggers
 
 To control a MicroTrigger or Action:
@@ -186,6 +195,7 @@ To control a MicroTrigger or Action:
 7. Change the "Order of Execution" or "Active" field
 
 <a name="Getting-the-MicroTrigger-Execution-Report">
+
 ## Getting the MicroTrigger Execution Report
 
 When the MicroTriggers run (after a DML), the framework provides a report of all the MicroTriggers that run during the Transaction. Below is a code sample to get the execution report.
@@ -207,6 +217,7 @@ for(MicroTriggerResult microTriggerResult :executionResults) {
 ```
 
 <a name="Author-and-Contributors">
+
 # Author and Contributors
 
 Author: [Kofi Johnson](https://github.com/kofijohnson)
@@ -216,6 +227,7 @@ Contributor : [Sebastian Schepis] (https://github.com/sschepis)
 Apex MicroTrigger Framework is sponsored by [Figur8 Cloud Solutions](http://www.figur8.com).
 
 <a name="Development-Roadmap">
+
 # Development Roadmap
 
 The following enhancements make up our immediate development roadmap.  If you have other features that you'd like to see placed on the roadmap, please contact us.
