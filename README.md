@@ -2,7 +2,7 @@
 
 - [Apex-Microtrigger](#Apex-Microtrigger)
 	- [What is it?](#What-is-it)
-	- [Installing the Framework in your organization](#Installing-the-Framework-in your-organization)
+	- [Installing the Framework in your organization](#Installing-the-Framework-in-your-organization)
 - [How do I create a MicroTrigger?](#How-do-I-create-a-MicroTrigger)
 	- [Creating Criterias](#Creating-Criterias)
 	- [Creating Actions](#Creating-Actions)
@@ -27,7 +27,7 @@ Like a workflow, a MicroTrigger operates against an object type, in a specific e
 
 Unlike Workflows, MicroTrigger Criteria and Actions are programmatically built by developers, by implementing a Criteria interface for criterias, and an Action interface for actions.  
 
-<a name="Installing-the-Framework-in your-organization">
+<a name="Installing-the-Framework-in-your-organization">
 ## Installing the Framework in your organization
 
 MicroTrigger Framework can be deployed by clicking this button.
