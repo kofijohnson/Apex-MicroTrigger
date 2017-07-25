@@ -4,7 +4,7 @@
 	- [What is it?](#What-is-it)
 	- [Installing the Framework in your organization](#Installing-the-Framework-in-your-organization)
 - [How do I create a MicroTrigger?](#How-do-I-create-a-MicroTrigger)
-    - [Creating Base Triggers](#Creating-Base-Triggers)
+    - [Creating Base Triggers](#Create-Base-Triggers)
 	- [Creating Criterias](#Creating-Criterias)
 	- [Creating Actions](#Creating-Actions)
 	- [Creating the MicroTrigger Metadata Definition](#Creating-the-MicroTrigger-Metadata-Definition)
@@ -47,9 +47,10 @@ MicroTrigger Framework can be deployed by clicking this button.
 
 There are three basic steps to creating a microtrigger:
 
-1. A programmer writes a Criteria object implementing the trigger criteria,
-2. A programmer writes the action object(s) necessary to implement the trigger’s actions,
-3. An administrator creates a MicroTrigger custom metadata record, and specifies the context, target object type, and criteria/action class names that implement the trigger’s functionality.
+1. A programmer create the base Trigger that will support the framework concepts,
+2. A programmer writes a Criteria object implementing the trigger criteria,
+3. A programmer writes the action object(s) necessary to implement the trigger’s actions,
+4. An administrator creates a MicroTrigger custom metadata record, and specifies the context, target object type, and criteria/action class names that implement the trigger’s functionality.
 
 <a name="Create-Base-Triggers">
 
