@@ -56,7 +56,7 @@ There are three basic steps to creating a microtrigger:
 
 ## Create Base Triggers
 
-This part is manual process that requires creating the base Trigger for the obejct you are using the framework for. The code below is a template regarding how to setup your Trigger. 
+This part is a manual process that requires creating the base Trigger for the object being used by the framework. The code below is a template regarding how to setup your Trigger. 
 
 ```Apex
 
