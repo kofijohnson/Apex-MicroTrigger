@@ -58,9 +58,9 @@ public class TriggerAfterUndelete {
     ********************************************************************************************************/
     public class Context {
 
-		public Boolean isExecuting {get; private set;}
-		public List<SObject> newList {get; private set;}
-		public Integer size {get; private set;}
+        public Boolean isExecuting {get; private set;}
+        public List<SObject> newList {get; private set;}
+        public Integer size {get; private set;}
 
         /*******************************************************************************************************
         * @description After Undelete Context Constructor.

@@ -22,24 +22,24 @@
 ********************************************************************************************************/
 
 public class MicroTriggerResult {
-	public String MicroTriggerName {get; private set;}
-	public List<String> SuccessActions {get; set;}
-	public List<String> FailActions {get; set;}
-	public Boolean IsActive {get; set;}
-	public List<SObject> QualifiedRecords {get; set;}
-	public Boolean CriteriaIsMet { get {
-		return QualifiedRecords.isEmpty() == false;
-	}}
+    public String MicroTriggerName {get; private set;}
+    public List<String> SuccessActions {get; set;}
+    public List<String> FailActions {get; set;}
+    public Boolean IsActive {get; set;}
+    public List<SObject> QualifiedRecords {get; set;}
+    public Boolean CriteriaIsMet { get {
+        return QualifiedRecords.isEmpty() == false;
+    }}
 
-   	/*******************************************************************************************************
+    /*******************************************************************************************************
     * @description Constructor. Initializes trigger result object
-   	* @param microTriggerName The developer name for this MicroTrigger
+    * @param microTriggerName The developer name for this MicroTrigger
     ********************************************************************************************************/
-	public MicroTriggerResult(String microTriggerName) {
-		IsActive = false;
-		this.MicroTriggerName = microTriggerName;
-		SuccessActions = new List<String>();
-		FailActions = new List<String>();
-		QualifiedRecords = new List<SObject>();
-	}
+    public MicroTriggerResult(String microTriggerName) {
+        IsActive = false;
+        this.MicroTriggerName = microTriggerName;
+        SuccessActions = new List<String>();
+        FailActions = new List<String>();
+        QualifiedRecords = new List<SObject>();
+    }
 }

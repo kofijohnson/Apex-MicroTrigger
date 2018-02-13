@@ -25,16 +25,13 @@ public class MicroTriggersLoader {
 
     /** Static Variables/members. */
 
-	private static final String BEFORE_INSERT = 'Before Insert';
+    private static final String BEFORE_INSERT = 'Before Insert';
     private static final String AFTER_INSERT = 'After Insert';
     private static final String BEFORE_UPDATE = 'Before Update';
     private static final String AFTER_UPDATE = 'After Update';
     private static final String BEFORE_DELETE = 'Before Delete';
     private static final String AFTER_DELETE = 'After Delete';
     private static final String AFTER_UNDELETE = 'After Undelete';
-
-    // microTriggerMocks can only be used from Test Class. It helps to inject MicroTriggers from Test Class
-    @TestVisible private static List<BaseMicroTrigger> microTriggerMocks;
 
     /** Static Variables/members. Used for as Singleton Pattern */
 
@@ -55,22 +52,32 @@ public class MicroTriggersLoader {
     /** Non Static Variables/members. */
 
     private Map<String,BaseMicroTrigger> microTriggers;
+    // OverriddenMicroTriggers is helpfull in Test Class. It helps to inject MicroTriggers from Test Class,
+    // so the testing does not depend on the default (real) MicroTrigger configuration.
+    private static List<BaseMicroTrigger> overriddenMicroTriggers;
 
     /*******************************************************************************************************
     * @description Private Constructor. Singleton Pattern, it is used to prevent this class to be  
     * instantianted outside from this class.
     ********************************************************************************************************/
-	private MicroTriggersLoader() {
+    private MicroTriggersLoader() {
         microTriggers = new Map<String,BaseMicroTrigger>();
-		if(microTriggerMocks != null) {
-            for(BaseMicroTrigger currentMicroTriggerMock :microTriggerMocks)
+        for(MicroTrigger__mdt currentMicroTriggerMetadata :loadCustomMetaDataTypes()) {
+            microTriggers.put(currentMicroTriggerMetadata.DeveloperName, convertToMicroTrigger(currentMicroTriggerMetadata));
+        }
+    }
+
+    /*******************************************************************************************************
+    * @description Override the default MicroTriggers.
+    * @param List<BaseMicroTrigger> The list of the new MicroTriggers to use.
+    ********************************************************************************************************/
+    public void overrideMicroTriggers(List<BaseMicroTrigger> overriddenMicroTriggers) {
+        microTriggers = new Map<String,BaseMicroTrigger>();
+        if(overriddenMicroTriggers != null) {
+            for(BaseMicroTrigger currentMicroTriggerMock :overriddenMicroTriggers)
                 microTriggers.put(currentMicroTriggerMock.DeveloperName, currentMicroTriggerMock);
         }
-        else {
-            for(MicroTrigger__mdt currentMicroTriggerMetadata :loadCustomMetaDataTypes()) 
-                microTriggers.put(currentMicroTriggerMetadata.DeveloperName, convertToMicroTrigger(currentMicroTriggerMetadata));
-        }
-	}
+    }
 
     /*******************************************************************************************************
     * @description Returns true if a microtrigger with given name exists in the microtrigger loader.
@@ -204,11 +211,11 @@ public class MicroTriggersLoader {
     private List<MicroTrigger__mdt> loadCustomMetaDataTypes() {
         return [
             SELECT DeveloperName, Active__c, SObject__c, Event__c, Criteria__c, PreventRecursive__c,
-            	(
-            		SELECT Active__c, ApexClass__c, OrderOfExecution__c
-            		FROM MicroTriggerActions__r
-            		WHERE Active__c = true
-            	)
+                (
+                    SELECT Active__c, ApexClass__c, OrderOfExecution__c
+                    FROM MicroTriggerActions__r
+                    WHERE Active__c = true
+                )
             FROM MicroTrigger__mdt
             WHERE Active__c = true
             ORDER BY OrderOfExecution__c
@@ -237,7 +244,7 @@ public class MicroTriggersLoader {
             currentMicroTrigger = new TriggerAfterDelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
         if(customMetadataType.Event__c == AFTER_UNDELETE)
             currentMicroTrigger = new TriggerAfterUndelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
-		
+        
         currentMicroTrigger.setCriteria(customMetadataType.Criteria__c);
         
         List<MicroTriggerAction__mdt> sortedActions = getSortedActions(customMetadataType.MicroTriggerActions__r);
