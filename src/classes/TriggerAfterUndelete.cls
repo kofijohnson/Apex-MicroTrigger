@@ -16,101 +16,99 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * TriggerAfterUndelete
- * @Description: Trigger After Undelete Namespace.
- *               It contains classes Criteria, Action, Context.
- * @Author: Kofi Johnson - https://github.com/kofijohnson
- */
+/*******************************************************************************************************
+* @Description: Trigger After Undelete Namespace.
+*               It contains classes Criteria, Action, Context.
+* @Author: Kofi Johnson - https://github.com/kofijohnson
+********************************************************************************************************/
 
 public class TriggerAfterUndelete {
 
-    /**
-     * This interface is implemented to create a criteria for this trigger context
-     */
+    /*******************************************************************************************************
+    * @descripton The interface to implement in order to create a criteria for the After Undelete Trigger.
+    ********************************************************************************************************/
     public interface Criteria {
-        /**
-         * Run the criteria method, given a currentContext Context object. Return SObjects which have met criteria
-         * @param currentContext the current trigger context
-         * @return a lis tof SObjects which pass this criteria
-         */
-        List<SObject> run(TriggerAfterUndelete.Context currentContext);
+        
+        /*******************************************************************************************************
+        * @description Runs the criteria method, given the After Undelete context.
+        * And returns the SObjects that meet the criteria.
+        * @param Context The After Undelete context.
+        * @return List<SObject> List of SObjects which have met this criteria.
+        ********************************************************************************************************/
+        List<SObject> run(Context currentContext);
     }
 
-    /**
-     * This interface is implemented to create an action for this trigger context
-     */
+    /*******************************************************************************************************
+    * @descripton This interface is implemented to create an action for this trigger context.
+    ********************************************************************************************************/
     public interface Action {
-        /**
-         * Run the action method, given a currentContext Context object, and a list of objects matching microtrigger criteria.
-         * @param currentContext the current trigger context
-         * @param scope a list of SObjects which have met criteria for the microtrigger
-         * @return Boolean indicating whether action completed successfully
-         */
-        Boolean run(TriggerAfterUndelete.Context currentContext, List<SObject> scope);
+        
+        /*******************************************************************************************************
+        * @description Runs the action method, given the After Undelete context.
+        * @param Context The After Undelete context.
+        * @param List<SObject> A List of SObjects that met the criteria for the microtrigger.
+        * @return Boolean indicating whether the action completed successfully.
+        ********************************************************************************************************/
+        Boolean run(Context currentContext, List<SObject> scope);
     }
 
-    /**
-     * The Trigger Context class for this trigger context. Values from the Trigger global variable are
-     * copied into an instance of this class, which is then made available to Criteria and Action interface implementors
-     */
+    /*******************************************************************************************************
+    * @descripton The After Undelete Trigger Context. The values from the System.Trigger are copied into an 
+    * an instance of this class, then it is available to the Criterias and Actions.
+    ********************************************************************************************************/
     public class Context {
-        /** True if this Trigger is executing */
-		public Boolean isExecuting   {get; private set;}
 
-        /** List from Trigger.new */
+		public Boolean isExecuting {get; private set;}
 		public List<SObject> newList {get; private set;}
+		public Integer size {get; private set;}
 
-        /** From Trigger.size */
-		public Integer size          {get; private set;}
-
-        /**
-         * Set up this context from the global Trigger var
-         */
+        /*******************************************************************************************************
+        * @description After Undelete Context Constructor.
+        ********************************************************************************************************/
         public Context() {
             isExecuting = Trigger.isExecuting;
-            newList     = Trigger.new;
-            size        = Trigger.size;
+            newList = Trigger.new;
+            size = Trigger.size;
         }
     }
 
-    /**
-     * MicroTrigger class implementation for the BaseMicroTrigger within an after undelete context. Creates and
-     * passes the appropriate Context object to the criteria and actions for this MicroTrigger
-     */
+    /*******************************************************************************************************
+    * @description After Undelete MicroTrigger class implementation.
+    ********************************************************************************************************/
     public class MicroTrigger extends BaseMicroTrigger {
 
-        /**
-         * Class constructor.  Instantiate a microtrigger using the given developer and sobject names
-         * @param microTriggereveloperName the developer name for this microtrigger
-         * @param microTriggerSObjectName the SObject type for this microtrigger
-         */
+        /*******************************************************************************************************
+        * Class constructor. Instantiates the After Undelete Microtrigger using it developer and SObject name
+        * @param String the developer name for this Microtrigger.
+        * @param String the SObject type for this Microtrigger.
+        ********************************************************************************************************/
         public MicroTrigger(String microTriggereveloperName, String microTriggerSObjectName) {
             super(microTriggereveloperName, microTriggerSObjectName);
         }
 
-        /**
-         * Runs the criteria class for this microtrigger.  Instantiates a context object, a criteria object, and
-         * executes the criteria object, passing in the context object. 
-         * @param criteriaClass the name of the criteria class to execute
-         * @return a list of SObjects which have met the criteria
-         */
+        /*******************************************************************************************************
+        * @description Runs the criteria class for this Microtrigger. Instantiates the After Undelete Context,
+        * a criteria object, and executes the criteria object by passing in the context object. 
+        * @param String the name of the criteria class to execute.
+        * @return List<SObject> List of SObjects which have met the criteria.
+        ********************************************************************************************************/
         protected override List<SObject> runCriteria(String criteriaClass) {
-            TriggerAfterUndelete.Context currentContext   = new TriggerAfterUndelete.Context();
-            TriggerAfterUndelete.Criteria currentCriteria = (TriggerAfterUndelete.Criteria)Type.forName(criteriaClass).newInstance();
+            Context currentContext   = new Context();
+            Criteria currentCriteria = (Criteria)Type.forName(criteriaClass).newInstance();
             return currentCriteria.run(currentContext);
         }
 
-        /**
-         * Runs a given action class with a given list of SObjects and returns true if successful.
-         * Instantiates a context object, a action object, and executes the action object, passing in the context object and list of SObjects.  
-         * @param actionClass the class name of the action class
-         * @param qualifiedRecords a list of SObjects which have met criteria for this microtrigger
-         * @return True if the action class ran successfully
-         */
+        /*******************************************************************************************************
+        * @description Runs a given action class with a given list of SObjects and returns true if successful.
+        * Instantiates the After Undelete Context, the Action, and executes the Action by passing in the Context
+        * and list of SObjects.  
+        * @param String The class name of the action class.
+        * @param List<SObject> A List of SObjects which have met criteria for this Microtrigger.
+        * @return Boolean True if the action class ran successfully.
+        ********************************************************************************************************/
         protected override Boolean runAction(String actionClass, List<SObject> qualifiedRecords) {
-            TriggerAfterUndelete.Context currentContext   = new TriggerAfterUndelete.Context();
-            TriggerAfterUndelete.Action currentAction = (TriggerAfterUndelete.Action)Type.forName(actionClass).newInstance();
+            Context currentContext   = new Context();
+            Action currentAction = (Action)Type.forName(actionClass).newInstance();
             return currentAction.run(currentContext, qualifiedRecords);
         }
     }

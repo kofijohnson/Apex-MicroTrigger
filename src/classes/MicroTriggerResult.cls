@@ -16,33 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * MicroTriggerResult
- * @Description: Result (report), after a MicroTrigger runs
- * @Author: Kofi Johnson - https://github.com/kofijohnson
- */
+/*******************************************************************************************************
+* @Description: Result (report), after a MicroTrigger runs
+* @Author: Kofi Johnson - https://github.com/kofijohnson
+********************************************************************************************************/
 
 public class MicroTriggerResult {
-	/** the MicroTrigger that this result is associated with */
-	public String MicroTriggerName     {get; private set;}
-
-	/** If true, criteria were met when microtrigger was executed */
-	public Boolean CriteriaIsMet       {get; set;}
-
-	/** A list of action class names that were successfully executed */
+	public String MicroTriggerName {get; private set;}
 	public List<String> SuccessActions {get; set;}
+	public List<String> FailActions {get; set;}
+	public Boolean IsActive {get; set;}
+	public List<SObject> QualifiedRecords {get; set;}
+	public Boolean CriteriaIsMet { get {
+		return QualifiedRecords.isEmpty() == false;
+	}}
 
-	/** Whether the MicroTrigger was active */
-	public Boolean IsActive            {get; set;}
-
-	/**
-   * class constructor.  Initializes trigger result object
-   * @param microTriggerName The developer name for this MicroTrigger
-   */
+   	/*******************************************************************************************************
+    * @description Constructor. Initializes trigger result object
+   	* @param microTriggerName The developer name for this MicroTrigger
+    ********************************************************************************************************/
 	public MicroTriggerResult(String microTriggerName) {
-		CriteriaIsMet         = false;
-		IsActive              = false;
+		IsActive = false;
 		this.MicroTriggerName = microTriggerName;
-		SuccessActions        = new List<String>();
+		SuccessActions = new List<String>();
+		FailActions = new List<String>();
+		QualifiedRecords = new List<SObject>();
 	}
 }

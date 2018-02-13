@@ -16,22 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * MicroTriggersLoader
- * @Description: Class that loads the MicroTriggers
- * @Author: Kofi Johnson - https://github.com/kofijohnson
- */
+/*******************************************************************************************************
+* @Description: Class that loads the MicroTriggers
+* @Author: Kofi Johnson - https://github.com/kofijohnson
+********************************************************************************************************/
 
 public class MicroTriggersLoader {
 
     /** Static Variables/members. */
 
-	private static final String BEFORE_INSERT  = 'Before Insert';
-    private static final String AFTER_INSERT   = 'After Insert';
-    private static final String BEFORE_UPDATE  = 'Before Update';
-    private static final String AFTER_UPDATE   = 'After Update';
-    private static final String BEFORE_DELETE  = 'Before Delete';
-    private static final String AFTER_DELETE   = 'After Delete';
+	private static final String BEFORE_INSERT = 'Before Insert';
+    private static final String AFTER_INSERT = 'After Insert';
+    private static final String BEFORE_UPDATE = 'Before Update';
+    private static final String AFTER_UPDATE = 'After Update';
+    private static final String BEFORE_DELETE = 'Before Delete';
+    private static final String AFTER_DELETE = 'After Delete';
     private static final String AFTER_UNDELETE = 'After Undelete';
 
     // microTriggerMocks can only be used from Test Class. It helps to inject MicroTriggers from Test Class
@@ -42,10 +41,10 @@ public class MicroTriggersLoader {
     // Singleton Pattern, using static variable and getInstance
     private static MicroTriggersLoader currentMicroTriggersLoader;
 
-    /**
-     * return singleton instance of this class
-     * @returns MicroTriggersLoader the singleton instande
-     */
+    /*******************************************************************************************************
+    * @description Returns the Singleton instance of the MicroTriggersLoader class.
+    * @return MicroTriggersLoader The singleton instance.
+    ********************************************************************************************************/
     public static MicroTriggersLoader getInstance() {
         if(currentMicroTriggersLoader == null)
             currentMicroTriggersLoader = new MicroTriggersLoader();
@@ -57,51 +56,53 @@ public class MicroTriggersLoader {
 
     private Map<String,BaseMicroTrigger> microTriggers;
 
-    /**
-     * Private Constructor. Singleton Pattern, used to prevent this class to be instantianted outside from this class.
-     */
+    /*******************************************************************************************************
+    * @description Private Constructor. Singleton Pattern, it is used to prevent this class to be  
+    * instantianted outside from this class.
+    ********************************************************************************************************/
 	private MicroTriggersLoader() {
         microTriggers = new Map<String,BaseMicroTrigger>();
 		if(microTriggerMocks != null) {
-            for(BaseMicroTrigger aMicroTriggerMock :microTriggerMocks)
-                microTriggers.put(aMicroTriggerMock.DeveloperName, aMicroTriggerMock);
+            for(BaseMicroTrigger currentMicroTriggerMock :microTriggerMocks)
+                microTriggers.put(currentMicroTriggerMock.DeveloperName, currentMicroTriggerMock);
         }
         else {
-            for(MicroTrigger__mdt aMicroTriggerMetadata :loadCustomMetaDataTypes()) 
-                microTriggers.put(aMicroTriggerMetadata.DeveloperName, convertToMicroTrigger(aMicroTriggerMetadata));
+            for(MicroTrigger__mdt currentMicroTriggerMetadata :loadCustomMetaDataTypes()) 
+                microTriggers.put(currentMicroTriggerMetadata.DeveloperName, convertToMicroTrigger(currentMicroTriggerMetadata));
         }
 	}
 
-    /**
-     * Returns true if a microtrigger with given name exists in the microtrigger loader
-     * @param microTriggerName the Name of the MicroTrigger to look for
-     * @return Boolean true if microtrigger loader contains the MicroTrigger
-     */
+    /*******************************************************************************************************
+    * @description Returns true if a microtrigger with given name exists in the microtrigger loader.
+    * @param String The Name of the MicroTrigger to look for.
+    * @return Boolean. True if the microtrigger loader contains the MicroTrigger.
+    ********************************************************************************************************/
     public Boolean contains(String microTriggerName) {
         return microTriggers.containsKey(microTriggerName);
     }
 
-    /**
-     * Returns Microtrigger with given name if it exists in the microtrigger loader
-     * @param microTriggerName the Name of the MicroTrigger to look for
-     * @return BaseMicroTrigger The MicroTrigger object or NULL if the microtrigger wasn't found
-     */
+    /*******************************************************************************************************
+    * @description Returns Microtrigger with given name if it exists in the microtrigger loader.
+    * @param String The Name of the MicroTrigger to look for.
+    * @return BaseMicroTrigger The MicroTrigger object or NULL if the microtrigger wasn't found.
+    ********************************************************************************************************/
     public BaseMicroTrigger getMicroTrigger(String microTriggerName) {
         return microTriggers.get(microTriggerName);
     }
 
-    /**
-     * Returns all Microtriggers that were loaded by the microtrigger loader
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers that were loaded by the microtrigger loader.
+    * @return List<BaseMicroTrigger> The Lists of the Microtriggers.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getMicroTriggers() {
         return microTriggers.values();
     }
 
-    /**
-     * Returns all Microtriggers for the given SObject type and the Before Insert context
-     * @param the SObject Type for which to return microtriggers
-     * @return List<BaseMicroTrigger> a list of microtriggers. Empty list returned if none found
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers for the given SObject type and the Before Insert context.
+    * @param String The SObject Type for which to return Microtriggers.
+    * @return List<BaseMicroTrigger> A List of Microtriggers. Empty list returned if none found.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getBeforeInsertMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         for(BaseMicroTrigger currentMicroTrigger :microTriggers.values()) {
@@ -111,11 +112,11 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * Returns all Microtriggers for the given SObject type and the After Insert context
-     * @param the SObject Type for which to return microtriggers
-     * @return List<BaseMicroTrigger> a list of microtriggers. Empty list returned if none found
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers for the given SObject type and the After Insert context.
+    * @param String The SObject Type for which to return Microtriggers.
+    * @return List<BaseMicroTrigger> A List of Microtriggers. Empty list returned if none found.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getAfterInsertMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         for(BaseMicroTrigger currentMicroTrigger :microTriggers.values()) {
@@ -125,11 +126,11 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * Returns all Microtriggers for the given SObject type and the Before Update context
-     * @param the SObject Type for which to return microtriggers
-     * @return List<BaseMicroTrigger> a list of microtriggers. Empty list returned if none found
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers for the given SObject type and the Before Update context.
+    * @param String The SObject Type for which to return Microtriggers.
+    * @return List<BaseMicroTrigger> A List of Microtriggers. Empty list returned if none found.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getBeforeUpdateMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         for(BaseMicroTrigger currentMicroTrigger :microTriggers.values()) {
@@ -139,11 +140,11 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * Returns all Microtriggers for the given SObject type and the After Update context
-     * @param the SObject Type for which to return microtriggers
-     * @return List<BaseMicroTrigger> a list of microtriggers. Empty list returned if none found
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers for the given SObject type and the After Update context.
+    * @param String The SObject Type for which to return Microtriggers.
+    * @return List<BaseMicroTrigger> A List of Microtriggers. Empty list returned if none found.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getAfterUpdateMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         for(BaseMicroTrigger currentMicroTrigger :microTriggers.values()) {
@@ -153,11 +154,11 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * Returns all Microtriggers for the given SObject type and the Before Delete context
-     * @param the SObject Type for which to return microtriggers
-     * @return List<BaseMicroTrigger> a list of microtriggers. Empty list returned if none found
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers for the given SObject type and the Before Delete context.
+    * @param String The SObject Type for which to return Microtriggers.
+    * @return List<BaseMicroTrigger> A List of Microtriggers. Empty list returned if none found.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getBeforeDeleteMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         for(BaseMicroTrigger currentMicroTrigger :microTriggers.values()) {
@@ -167,11 +168,11 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * Returns all Microtriggers for the given SObject type and the After Delete context
-     * @param the SObject Type for which to return microtriggers
-     * @return List<BaseMicroTrigger> a list of microtriggers. Empty list returned if none found
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers for the given SObject type and the After Delete context.
+    * @param String The SObject Type for which to return Microtriggers.
+    * @return List<BaseMicroTrigger> A List of Microtriggers. Empty list returned if none found.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getAfterDeleteMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         for(BaseMicroTrigger currentMicroTrigger :microTriggers.values()) {
@@ -181,11 +182,11 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * Returns all Microtriggers for the given SObject type and the After Undelete Insert context
-     * @param the SObject Type for which to return microtriggers
-     * @return List<BaseMicroTrigger> a list of microtriggers. Empty list returned if none found
-     */
+    /*******************************************************************************************************
+    * @description Returns all Microtriggers for the given SObject type and the After Undelete context.
+    * @param String The SObject Type for which to return Microtriggers.
+    * @return List<BaseMicroTrigger> A List of Microtriggers. Empty list returned if none found.
+    ********************************************************************************************************/
     public List<BaseMicroTrigger> getAfterUndeleteMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         for(BaseMicroTrigger currentMicroTrigger :microTriggers.values()) {
@@ -195,10 +196,11 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * Returns a list of MicroTrigger__mdt Custom Metadata object.  Each record represents a MicroTrigger
-     * @return List<MicroTrigger__mdt> A list of MicroTrigger custom metadata records
-     */
+    /*******************************************************************************************************
+    * @description Returns a list of MicroTrigger__mdt Custom Metadata object. 
+    * Each record represents a MicroTrigger.
+    * @return List<MicroTrigger__mdt> A List of MicroTrigger custom metadata records.
+    ********************************************************************************************************/
     private List<MicroTrigger__mdt> loadCustomMetaDataTypes() {
         return [
             SELECT DeveloperName, Active__c, SObject__c, Event__c, Criteria__c, PreventRecursive__c,
@@ -213,11 +215,12 @@ public class MicroTriggersLoader {
         ];
     }
 
-    /**
-     * Given a MicroTrigger__mdt Custom Metadata record, build and return the appropriate MicroTrigger object instance
-     * @param customMetadataType a single MicroTrigger__mdt custom metadata record
-     * @return BaseMicroTrigger An instance of the BaseMicroTrigger object
-     */
+    /*******************************************************************************************************
+    * @description Given a MicroTrigger__mdt Custom Metadata record, build and return the appropriate
+    * MicroTrigger object instance.
+    * @param MicroTrigger__mdt a single MicroTrigger__mdt custom metadata record.
+    * @return BaseMicroTrigger An instance of the BaseMicroTrigger Object.
+    ********************************************************************************************************/
     private BaseMicroTrigger convertToMicroTrigger(MicroTrigger__mdt customMetadataType) {
         BaseMicroTrigger currentMicroTrigger;
         if(customMetadataType.Event__c == BEFORE_INSERT)
@@ -242,18 +245,17 @@ public class MicroTriggersLoader {
             if(String.isNotBlank(actionCustomMetadataType.ApexClass__c))
                 currentMicroTrigger.addAction(actionCustomMetadataType.ApexClass__c);
         }
-
         if(customMetadataType.PreventRecursive__c)
             currentMicroTrigger.preventRecursive();
 
         return currentMicroTrigger;
     }
 
-    /**
-     * Given a List of MicroTriggerAction__mdt Custom Metadata, return a sorted List
-     * @param List of MicroTriggerAction__mdt custom metadata
-     * @return Sorted List of MicroTriggerAction__mdt custom metadata
-     */
+    /*******************************************************************************************************
+    * @description Given a List of MicroTriggerAction__mdt Custom Metadata, return a sorted List.
+    * @param List<MicroTriggerAction__mdt> List of MicroTriggerAction__mdt custom metadata.
+    * @return List<MicroTriggerAction__mdt> Sorted List of MicroTriggerAction__mdt custom metadata
+    ********************************************************************************************************/
     private List<MicroTriggerAction__mdt> getSortedActions(List<MicroTriggerAction__mdt> actionCustomMetadataTypes) {
         List<MicroTriggerAction__mdt> result = new List<MicroTriggerAction__mdt>();
 
@@ -271,27 +273,27 @@ public class MicroTriggersLoader {
         return result;
     }
 
-    /**
-     * TriggerActionMetadataType implements Comparable, 
-     * so we can sort the MicroTriggerAction__mdt based on OrderOfExecution__c.
-     */
+    /*******************************************************************************************************
+    * @descripton TTriggerActionMetadataType implements Comparable, 
+    * so we can sort the MicroTriggerAction__mdt based on OrderOfExecution__c.
+    ********************************************************************************************************/
     class TriggerActionMetadataType implements Comparable {
         public MicroTriggerAction__mdt currentRecord {get; private set;}
         
-        // Constructor
+        /*******************************************************************************************************
+        * @description Constructor
+        ********************************************************************************************************/
         TriggerActionMetadataType(MicroTriggerAction__mdt action) {
             currentRecord = action;
         }
         
-        // Compare TriggerAction based on the field Order Of Execution.
+        /*******************************************************************************************************
+        * @description Compare TriggerAction based on the field Order Of Execution.
+        * @param TriggerActionMetadataType The Object to compare.
+        * @return Integer.
+        ********************************************************************************************************/
         public Integer compareTo(Object compareTo) {
-            TriggerActionMetadataType compareTriggerActionMetadataType = (TriggerActionMetadataType) compareTo;
-            
-            if (currentRecord.OrderOfExecution__c > compareTriggerActionMetadataType.currentRecord.OrderOfExecution__c)
-                return 1;
-            else
-                return -1;
-
+            return currentRecord.OrderOfExecution__c > ((TriggerActionMetadataType) compareTo).currentRecord.OrderOfExecution__c ? 1 : -1;
         }
     }
 }
