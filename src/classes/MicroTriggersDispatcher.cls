@@ -16,31 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * MicroTriggersDispatcher
- * @Description: Class that loads and executes the MicroTriggers
- * @Author: Kofi Johnson - https://github.com/kofijohnson
- */
+/*******************************************************************************************************
+* @Description: Class that loads and executes the MicroTriggers.
+* @Author: Kofi Johnson - https://github.com/kofijohnson
+********************************************************************************************************/
 
 public class MicroTriggersDispatcher {
     public static  List<MicroTriggerResult> ExecutionResults;
 
     private MicroTriggersLoader microTriggerLoader;
     
-    /**
-     * class constructor. Set a reference to the processes loader.
-     * @return string sobject type
-     */     
+    /*******************************************************************************************************
+    * @description Constructor.
+    ********************************************************************************************************/    
     public MicroTriggersDispatcher() {
         if(ExecutionResults == null)
             ExecutionResults = new List<MicroTriggerResult>();
         microTriggerLoader  = MicroTriggersLoader.getInstance();
     }
 
-    /**
-     * Dispatch the trigger call to the appropriate trigger processes.
-     * @return string sobject type
-     */  
+    /*******************************************************************************************************
+    * @description Gets and runs the appropriates MicroTriggers.
+    ********************************************************************************************************/
     public void dispatch() {         
         String sObjectName = getTriggerSObject();
         List<BaseMicroTrigger> contextMicroTriggers = getContextMicroTriggers(sObjectName);
@@ -51,10 +48,10 @@ public class MicroTriggersDispatcher {
         }
     }
     
-    /**
-     * return the sobject type of the trigger object
-     * @return string sobject type
-     */  
+    /*******************************************************************************************************
+    * @description Returns the current Trigger SObject Type.
+    * @return String SObject Type.
+    ********************************************************************************************************/
     private String getTriggerSObject() {
         String result = null;
 
@@ -66,10 +63,11 @@ public class MicroTriggersDispatcher {
         return result;
     }
 
-    /**
-     * Get a list of configured MicroTriggers given an SObject name and the current trigger context
-     * @return List<BaseMicroTrigger> A list of MicroTrigger objects for the given SObject type and current trigger context
-     */  
+    /*******************************************************************************************************
+    * @description Gets a list of configured MicroTriggers given an SObject name and the current trigger context.
+    * @param String SObject Name.
+    * @return List<BaseMicroTrigger> MicroTrigger objects for the given SObject type and current trigger context.
+    ********************************************************************************************************/ 
     private List<BaseMicroTrigger> getContextMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
         if(Trigger.isBefore && Trigger.isInsert)
