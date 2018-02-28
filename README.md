@@ -240,8 +240,6 @@ Author: [Kofi Johnson](https://github.com/kofijohnson)
 
 Contributor : [Sebastian Schepis] (https://github.com/sschepis)
 
-Apex MicroTrigger Framework is sponsored by [Figur8 Cloud Solutions](http://www.figur8.com).
-
 <a name="Development-Roadmap">
 
 # Development Roadmap
