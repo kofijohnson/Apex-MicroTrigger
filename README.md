@@ -32,14 +32,11 @@ Unlike Workflows, MicroTrigger Criteria and Actions are programmatically built b
 
 <a name="Installing-the-Framework-in-your-organization">
 
-## Installing the Framework in your organization
+## Installing the Framework in your Scratch Org
 
 MicroTrigger Framework can be deployed by clicking this button.
 
-<a href="https://githubsfdeploy.herokuapp.com?owner=kofijohnson&repo=Apex-MicroTrigger">
-  <img alt="Deploy to Salesforce"
-       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
-</a>
+[![Deploy](https://deploy-to-sfdx.com/dist/assets/images/DeployToSFDX.svg)](https://deploy-to-sfdx.com/)
 
 <a name="How-do-I-create-a-MicroTrigger">
 
@@ -249,4 +246,5 @@ The following enhancements make up our immediate development roadmap.  If you ha
 1. 'Log execution' checkbox for MicroTrigger. When this flag is set to true, all invocation and execution of the MicroTrigger is logged to the system debug log.
 2. Custom MicroTrigger edit VisualForce page.  The standard Custom Metadata pages are clunky. A better UI for the management of MicroTriggers is needed.
 3. Automatic creation of Apex Trigger using Metadata API.  Use the Salesforce Metadata API to automatically create and install the base triggers needed for the framework to function.
+
 
