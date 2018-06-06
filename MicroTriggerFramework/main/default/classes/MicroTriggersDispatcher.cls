@@ -25,7 +25,7 @@ public class MicroTriggersDispatcher {
     public static  List<MicroTriggerResult> ExecutionResults;
 
     private MicroTriggersLoader microTriggerLoader;
-    
+
     /*******************************************************************************************************
     * @description Constructor.
     ********************************************************************************************************/    
@@ -38,14 +38,20 @@ public class MicroTriggersDispatcher {
     /*******************************************************************************************************
     * @description Gets and runs the appropriates MicroTriggers.
     ********************************************************************************************************/
-    public void dispatch() {         
+    public void dispatch(String triggerName) {
+        MicroTriggerLogging.LogEvent triggerLogEvent = new MicroTriggerLogging.LogEvent(triggerName, 'Trigger');
+        MicroTriggerLogging.emitLogStarted(triggerLogEvent);
+
         String sObjectName = getTriggerSObject();
         List<BaseMicroTrigger> contextMicroTriggers = getContextMicroTriggers(sObjectName);
         for(BaseMicroTrigger currentMicroTrigger :contextMicroTriggers) {
             MicroTriggerResult currentMicroTriggerResult = currentMicroTrigger.execute();
-            if(currentMicroTriggerResult.IsActive)
+            if(currentMicroTriggerResult.IsActive) {
                 ExecutionResults.add(currentMicroTriggerResult);
+            }
         }
+
+        MicroTriggerLogging.emitLogCompleted(triggerLogEvent);
     }
     
     /*******************************************************************************************************

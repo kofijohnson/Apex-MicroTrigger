@@ -29,6 +29,7 @@ public abstract class BaseMicroTrigger {
 
     private String criteriaClass;
     private List<String> actionsClasses;
+    private MicroTriggerLogging.LogEvent microTriggerLogEvent;
 
     /*******************************************************************************************************
     * @description class constructor. Initializes Trigger Process.
@@ -121,6 +122,9 @@ public abstract class BaseMicroTrigger {
     ********************************************************************************************************/
     public MicroTriggerResult execute() {
         MicroTriggerResult result = new MicroTriggerResult(this.DeveloperName);
+
+        microTriggerLogEvent = new MicroTriggerLogging.LogEvent(developerName, 'MicroTrigger');
+        MicroTriggerLogging.emitLogStarted(microTriggerLogEvent);
         
         // Exit if microtrigger is inactive.
         result.IsActive = IsActive;
@@ -144,6 +148,9 @@ public abstract class BaseMicroTrigger {
         }
         // Run each of the action classes and then return reult.
         for(String actionClass :actionsClasses) {
+            MicroTriggerLogging.LogEvent actionLogEvent = new MicroTriggerLogging.LogEvent(actionClass, 'Action');
+            MicroTriggerLogging.emitLogStarted(actionLogEvent);
+            
             Boolean success = runAction(actionClass, qualifiedRecords);
             if(success) {
                 result.SuccessActions.add(actionClass);
@@ -151,7 +158,10 @@ public abstract class BaseMicroTrigger {
             else {
                 result.FailActions.add(actionClass);
             }
+            MicroTriggerLogging.emitLogCompleted(actionLogEvent);
         }
+
+        MicroTriggerLogging.emitLogCompleted(microTriggerLogEvent);
         return result;
     }
 
