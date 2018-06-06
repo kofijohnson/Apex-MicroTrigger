@@ -33,7 +33,7 @@
             <value>
                 <fullName>MicroTriggerTestingMock__c</fullName>
                 <default>false</default>
-                <label>MicroTriggerTestingMock__c</label>
+                <label>MicroTriggerTestingMock</label>
             </value>
         </valueSetDefinition>
     </valueSet>
