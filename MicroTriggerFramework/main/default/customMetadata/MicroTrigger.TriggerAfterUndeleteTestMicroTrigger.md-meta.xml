@@ -19,15 +19,15 @@
         <value xsi:type="xsd:string">After Undelete</value>
     </values>
     <values>
+        <field>Object__c</field>
+        <value xsi:type="xsd:string">MicroTriggerTestingMock__c</value>
+    </values>
+    <values>
         <field>OrderOfExecution__c</field>
         <value xsi:type="xsd:double">1.0</value>
     </values>
     <values>
         <field>PreventRecursive__c</field>
         <value xsi:type="xsd:boolean">false</value>
-    </values>
-    <values>
-        <field>SObject__c</field>
-        <value xsi:type="xsd:string">MicroTriggerTestingMock__c</value>
     </values>
 </CustomMetadata>

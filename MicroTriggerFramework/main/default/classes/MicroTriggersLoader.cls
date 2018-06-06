@@ -207,7 +207,7 @@ public class MicroTriggersLoader {
     ********************************************************************************************************/
     private List<MicroTrigger__mdt> loadCustomMetaDataTypes() {
         return [
-            SELECT DeveloperName, Active__c, SObject__c, Event__c, Criteria__c, PreventRecursive__c,
+            SELECT DeveloperName, Active__c, Object__c, Event__c, Criteria__c, PreventRecursive__c,
                 (
                     SELECT Active__c, ApexClass__c, OrderOfExecution__c
                     FROM MicroTriggerActions__r
@@ -228,19 +228,19 @@ public class MicroTriggersLoader {
     private BaseMicroTrigger convertToMicroTrigger(MicroTrigger__mdt customMetadataType) {
         BaseMicroTrigger currentMicroTrigger;
         if(customMetadataType.Event__c == BEFORE_INSERT)
-            currentMicroTrigger = new TriggerBeforeInsert.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
+            currentMicroTrigger = new TriggerBeforeInsert.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.Object__c);
         if(customMetadataType.Event__c == AFTER_INSERT)
-            currentMicroTrigger = new TriggerAfterInsert.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
+            currentMicroTrigger = new TriggerAfterInsert.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.Object__c);
         if(customMetadataType.Event__c == BEFORE_UPDATE)
-            currentMicroTrigger = new TriggerBeforeUpdate.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
+            currentMicroTrigger = new TriggerBeforeUpdate.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.Object__c);
         if(customMetadataType.Event__c == AFTER_UPDATE)
-            currentMicroTrigger = new TriggerAfterUpdate.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
+            currentMicroTrigger = new TriggerAfterUpdate.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.Object__c);
         if(customMetadataType.Event__c == BEFORE_DELETE)
-            currentMicroTrigger = new TriggerBeforeDelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
+            currentMicroTrigger = new TriggerBeforeDelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.Object__c);
         if(customMetadataType.Event__c == AFTER_DELETE)
-            currentMicroTrigger = new TriggerAfterDelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
+            currentMicroTrigger = new TriggerAfterDelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.Object__c);
         if(customMetadataType.Event__c == AFTER_UNDELETE)
-            currentMicroTrigger = new TriggerAfterUndelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.SObject__c);
+            currentMicroTrigger = new TriggerAfterUndelete.MicroTrigger(customMetadataType.DeveloperName, customMetadataType.Object__c);
         
         currentMicroTrigger.setCriteria(customMetadataType.Criteria__c);
         
