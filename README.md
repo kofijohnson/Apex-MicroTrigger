@@ -58,7 +58,7 @@ This part is a manual process that requires creating the base Trigger for the ob
 ```Apex
 
 trigger AccountMicroTrigger on Account (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
-    MicroTriggersDispatcher dispatcher = new MicroTriggersDispatcher();
+    MicroTriggersDispatcher dispatcher = new MicroTriggersDispatcher('AccountMicroTrigger');
     dispatcher.dispatch();
 }
 ```
