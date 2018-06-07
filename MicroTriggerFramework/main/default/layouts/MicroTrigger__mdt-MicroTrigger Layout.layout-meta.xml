@@ -16,7 +16,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Object__c</field>
+                <field>SObject__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

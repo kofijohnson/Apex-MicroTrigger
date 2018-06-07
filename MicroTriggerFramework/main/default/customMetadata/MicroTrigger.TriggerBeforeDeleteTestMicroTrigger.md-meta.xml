@@ -19,7 +19,7 @@
         <value xsi:type="xsd:string">Before Delete</value>
     </values>
     <values>
-        <field>Object__c</field>
+        <field>SObject__c</field>
         <value xsi:type="xsd:string">MicroTriggerTestingMock__c</value>
     </values>
     <values>
