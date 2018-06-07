@@ -2,7 +2,10 @@
   "packageDirectories": [
     {
       "path": "MicroTriggerFramework",
-      "default": true
+      "default": true,
+      "id": "0Hof20000004CAaCAM",
+      "versionName": "June 18",
+      "versionNumber": "1.0.0.NEXT"
     }
   ],
   "namespace": "",
