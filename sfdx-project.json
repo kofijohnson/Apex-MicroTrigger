@@ -3,7 +3,7 @@
     {
       "path": "MicroTriggerFramework",
       "default": true,
-      "id": "0Hof20000004CAaCAM",
+      "id": "MICROTRIGGERFRAMEWORK_PACKAGE_ID",
       "versionName": "June 18",
       "versionNumber": "1.0.0.NEXT"
     }
