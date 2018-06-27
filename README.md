@@ -22,7 +22,7 @@
 
 ## What is it?
 
-A trigger framework for creating and managing Apex triggers that uses microservice concepts and a mixture of programmatic and declarative tools for trigger creation, assembly, and management.
+A Trigger framework for creating and managing Apex Triggers that uses microservice concepts and a mixture of programmatic and declarative tools for Trigger creation, assembly, and management.
 
 This framework introduces the concept of a ‘MicroTrigger’.  A MicroTrigger is a declaratively-assembled component, much like a Workflow, which operates on an object in Salesforce when that object is affected. MicroTriggers are composed of a single Criteria object and a list of Action objects, chained together declaratively within the MicroTrigger metadata definition.
 
@@ -46,17 +46,16 @@ There are three basic steps to creating a microtrigger:
 
 1. A programmer creates the base Trigger that will support the framework concepts,
 2. A programmer writes a Criteria object implementing the trigger criteria,
-3. A programmer writes the action object(s) necessary to implement the trigger’s actions,
-4. An administrator creates a MicroTrigger custom metadata record, and specifies the context, target object type, and criteria/action class names that implement the trigger’s functionality.
+3. A programmer writes the Action object(s) necessary to implement the Tigger’s Tctions,
+4. An administrator/developer creates a MicroTrigger custom metadata record, and specifies the context, target object type, and criteria/action class names that implement the Trigger’s functionality.
 
 <a name="Create-Base-Triggers">
 
 ## Create Base Triggers
 
-This part is a manual process that requires creating the base Trigger for the object being used by the framework. The code below is a template regarding how to setup your Trigger. 
+This part is a manual process that requires creating the base Trigger for the object being used by the framework. The code below is a template regarding how to setup your Trigger.
 
 ```Apex
-
 trigger AccountMicroTrigger on Account (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
     MicroTriggersDispatcher dispatcher = new MicroTriggersDispatcher();
     dispatcher.dispatch('AccountMicroTrigger');
@@ -67,7 +66,7 @@ trigger AccountMicroTrigger on Account (before insert, before update, before del
 
 ## Creating Criterias
 
-To create a criteria, implement the Criteria interface for the Trigger execution context that the criteria will be operating within. Available trigger execution contexts include:
+To create a Criteria, implement the Criteria interface for the Trigger execution context that the criteria will be operating within. Available trigger execution contexts include:
 
 * TriggerBeforeInsert (before insert)
 * TriggerBeforeUpdate (before update)
@@ -77,80 +76,81 @@ To create a criteria, implement the Criteria interface for the Trigger execution
 * TriggerAfterDelete (after delete)
 * TriggerAfterDelete (after delete)
 
-Example: Implement a Criteria on before update, which selects accounts whose OwnerId’s have just changed:
+Example: Implement a Criteria on Before Update, which selects accounts whose OwnerId’s have just changed:
 
 ```apex
-/**
- * Implement Criteria object on TriggerBeforeUpdate to create a criteria that
- * will be used in a before update context to find Accounts whose OwnerIds changed
- */
-public class AccountOwnerIdChangedCritera implements TriggerBeforeUpdate.Criteria {
-    /**
-     * The single method in the Criteria interface to implement. Return a list of
-     * objects which match the desired criteria, given the trigger context object
-     */
+/********************************************************************************************************
+* @description Criteria Object on TriggerBeforeUpdate that will be used in a
+* Before Update context to find Accounts whose OwnerIds changed.
+********************************************************************************************************/
+public class AccountOwnerChangedCriteria implements TriggerBeforeUpdate.Criteria {
+
+    /*******************************************************************************************************
+    * @description The single method in the Criteria Interface to implement.
+    * Return a list of records which match the desired criteria, given the Trigger Context object.
+    * @param TriggerBeforeUpdate.Context The Before Update Trigger Context.
+    * @return List<SObject> The list of the records which match the criteria. In this case, the list of 
+    * accounts whose Owner have changed.
+    ********************************************************************************************************/
     public List<SObject> run(TriggerBeforeUpdate.Context currentContext) {
-        List<Account> resultList = new List<Account>();
+        List<Account> accounts = new List<Account>();
  
-        // iterate through all changed records, and add accounts
+        // Iterate through all changed records, and add accounts
         // whose ownerid's have just changed to the result list
-        for(SObject newObject : currentContext.newList) {
-            Account newAccount = (Account) newObject;
+        for(Account newAccount : (List<Account>) currentContext.newList) {
             Account oldAccount = (Account) currentContext.oldMap.get(newAccount.Id);
             if(newAccount.OwnerId != oldAccount.OwnerId) {
-                resultList.add(newAccount);
+                accounts.add(newAccount);
             }
         }
-        // return list of objects which have fulfilled the criteria
-        return resultList;
+        // return the list of records which have fulfilled the criteria.
+        return accounts;
     }
 }
 ```
 <a name="Creating-Actions">
 
-## Creating Actions
+## Creating Action
 
-To create a criteria, implement the Criteria interface for the Trigger execution context that the criteria will be operating within.   Available trigger execution contexts are the same as criteria.
+To create the Action, implement the Action interface for the Trigger execution context that the Action will be operating within.
 
-Example: Implement an action on before update which sets the OwnerId of all Contact records associated with an Account to the Account’s OwnerId
+Example: Implement an Action on Before Update which sets the OwnerId of all Contact records associated with an Account to the Account’s OwnerId
 
 ```apex
-/**
- * implement Action object on TriggerBeforeUpdate which sets the OwnerId
- * of all Contact records associated with an Account to the Account's OwnerId
- */
-public class ContactsChangeOwnerIdAction implements TriggerBeforeUpdate.Action {
-    /**
-     * The single method in the Criteria interface to implement. Provides a trigger
-     * context and a list of SObjects which matched the MicroTrigger criteria.
-     * Returns true if action has been completed successfully
-     */
-    public Boolean run(TriggerBeforeUpdate.Context currentContext, List<SObject> scope) {
-        Set<Id> accountIds = (new Map<Id,SObject>(scope)).keySet();
-        // query for contacts with given account id's
-        List<Contact> allTheContacts = [
-            SELECT AccountId from Contact where AccountId in :accountIds
-        ];
+/*******************************************************************************************************
+* @description Action Object on TriggerBeforeUpdate that will be used in a
+* Before Update context to update the description field of the  Accounts 
+* whose OwnerIds changed.
+********************************************************************************************************/
+public class AccountTrackPreviousOwnerAction implements TriggerBeforeUpdate.Action {
 
-        // change contact ownerid's to account's ownerid
-        for(SObject theObject : scope) {
-            Account theAccount = (Account) theObject;
-            for(Contact theContact : allTheContacts) {
-                if(theAccount.Id == theContact.AccountId) {
-                    theContact.OwnerId = theAccount.OwnerId;
-                }
-            }
+    /*******************************************************************************************************
+    * @description The single method in the Action Interface to implement.
+    * @param TriggerBeforeUpdate.Context. The Before Update Trigger Context.
+    * @param List<SObject>. List<SObject> The list of the records which match the criteria. 
+    * In this case, the list of accounts whose Owner have changed.
+    * @return Boolean. A flag that tells if the Action runs successfull or not.
+    ********************************************************************************************************/
+    public Boolean run(TriggerBeforeUpdate.Context currentContext, List<SObject> scope) {
+        // Get the accounts owners.
+        Set<Id> userIds = new Set<Id>();
+        for (Account newAccount : (List<Account>) scope) {
+            Account oldAccount = (Account) currentContext.oldMap.get(newAccount.Id);
+            userIds.add(oldAccount.OwnerId);
+        }
+        Map<Id,User> accountsOwners = new Map<Id,User>([
+            SELECT Id, FirstName, LastName 
+            FROM User WHERE Id IN :userIds
+        ]);
+        
+        // Track the previous owner on the account's description.
+        for(Account newAccount : (List<Account>) scope) {
+            Account oldAccount = (Account) currentContext.oldMap.get(newAccount.Id);
+            User oldOwner = accountsOwners.get(oldAccount.OwnerId);
+            newAccount.Description = 'Previous Owner: ' + oldOwner.FirstName + ' ' + oldOwner.LastName;
         }
 
-        // try to update contacts. If fail, print error to debug log and return false
-        try {
-            update allTheContacts;
-        } catch (Exception e) {
-            System.assert(false,e);
-            return false;
-        }   
-
-        // if we got here everything worked so return true
+        // Return true to tell the Framework that the logic runs successfully.
         return true;
     }
 }
@@ -211,7 +211,7 @@ To control a MicroTrigger or Action:
 
 ## Getting the MicroTrigger Execution Report
 
-When the MicroTriggers run (after a DML), the framework provides a report of all the MicroTriggers that run during the Transaction. Below is a code sample to get the execution report.
+When the MicroTriggers run (after a DML), the framework provides a report of all the MicroTriggers that run during the transaction. Below is a code sample to get the execution report.
 
 //Get the execution results from the Dispatcher.
 List<MicroTriggerResult> executionResults = MicroTriggersDispatcher.ExecutionResults;
@@ -244,7 +244,7 @@ Contributor : [Sebastian Schepis] (https://github.com/sschepis)
 The following enhancements make up our immediate development roadmap.  If you have other features that you'd like to see placed on the roadmap, please contact us.
 
 1. 'Log execution' checkbox for MicroTrigger. When this flag is set to true, all invocation and execution of the MicroTrigger is logged to the system debug log.
-2. Custom MicroTrigger edit VisualForce page.  The standard Custom Metadata pages are clunky. A better UI for the management of MicroTriggers is needed.
-3. Automatic creation of Apex Trigger using Metadata API.  Use the Salesforce Metadata API to automatically create and install the base triggers needed for the framework to function.
+2. Custom MicroTrigger edit VisualForce page. The standard Custom Metadata pages are clunky. A better UI for the management of MicroTriggers is needed.
+3. Automatic creation of Apex Trigger using Metadata API. Use the Salesforce Metadata API to automatically create and install the base triggers needed for the framework to function.
 
 
