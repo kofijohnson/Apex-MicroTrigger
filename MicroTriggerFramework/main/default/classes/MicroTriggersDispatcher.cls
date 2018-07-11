@@ -77,7 +77,7 @@ public class MicroTriggersDispatcher {
     private List<BaseMicroTrigger> getContextMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
 
-        switch on Trigger.operationType() {
+        switch on Trigger.operationType {
 
             when BEFORE_INSERT {
                 result = microTriggerLoader.getBeforeInsertMicroTriggers(sObjectName);
