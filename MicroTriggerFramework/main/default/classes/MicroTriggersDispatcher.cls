@@ -76,20 +76,31 @@ public class MicroTriggersDispatcher {
     ********************************************************************************************************/ 
     private List<BaseMicroTrigger> getContextMicroTriggers(String sObjectName) {
         List<BaseMicroTrigger> result = new List<BaseMicroTrigger>();
-        if(Trigger.isBefore && Trigger.isInsert)
-            result = microTriggerLoader.getBeforeInsertMicroTriggers(sObjectName);
-        if(Trigger.isAfter && Trigger.isInsert)
-            result = microTriggerLoader.getAfterInsertMicroTriggers(sObjectName);
-        if(Trigger.isBefore && Trigger.isUpdate)
-            result = microTriggerLoader.getBeforeUpdateMicroTriggers(sObjectName);
-        if(Trigger.isAfter && Trigger.isUpdate)
-            result = microTriggerLoader.getAfterUpdateMicroTriggers(sObjectName);
-        if(Trigger.isBefore && Trigger.isDelete)
-            result = microTriggerLoader.getBeforeDeleteMicroTriggers(sObjectName);
-        if(Trigger.isAfter && Trigger.isDelete)
-            result = microTriggerLoader.getAfterDeleteMicroTriggers(sObjectName);
-        if(Trigger.isAfter && Trigger.isUndelete)
-            result = microTriggerLoader.getAfterUndeleteMicroTriggers(sObjectName);
+
+        switch on Trigger.operationType {
+
+            when BEFORE_INSERT {
+                result = microTriggerLoader.getBeforeInsertMicroTriggers(sObjectName);
+            }
+            when AFTER_INSERT {
+                result = microTriggerLoader.getAfterInsertMicroTriggers(sObjectName);                
+            }
+            when BEFORE_UPDATE {
+                result = microTriggerLoader.getBeforeUpdateMicroTriggers(sObjectName);                  
+            }
+            when AFTER_UPDATE {
+                result = microTriggerLoader.getAfterUpdateMicroTriggers(sObjectName);                
+            }
+            when BEFORE_DELETE {
+                result = microTriggerLoader.getBeforeDeleteMicroTriggers(sObjectName);                
+            }
+            when AFTER_DELETE {
+                result = microTriggerLoader.getAfterDeleteMicroTriggers(sObjectName);                
+            }
+            when AFTER_UNDELETE {
+                result = microTriggerLoader.getAfterUndeleteMicroTriggers(sObjectName);                
+            }
+        }
 
         return result;
     }
