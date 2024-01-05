@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PlatformEventSubscriberConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <platformEventConsumer>MicroTriggerAsyncEventTrigger</platformEventConsumer>
+    <batchSize>1</batchSize>
+    <masterLabel>MicroTriggerAsyncEventConfig</masterLabel>
+    <isProtected>false</isProtected>
+</PlatformEventSubscriberConfig>

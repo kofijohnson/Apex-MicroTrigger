@@ -155,6 +155,43 @@ private class TriggerAfterUpdateTest {
         System.assertEquals(1, duplicateRecord.size(),'A new record (duplicate) should be created');
         System.assertEquals(microTriggerSObjectMock.Name + ' (DUPLICATE)', duplicateRecord[0].Name, 'The new record Name should have " DUPLICATE" appended');
     }
+
+    /**************************************************************************************************************************
+    @description Tests the After Update MicroTrigger logic with a valid Criteria, using the real MicroTrigger Configuration.
+    verify: The Criteria should be met and the Action should run.
+    ***************************************************************************************************************************/
+    @isTest static void testAsyncMicroTriggerWithValidCriteria() {
+        MicroTriggersLoader loader = MicroTriggersLoader.getInstance();
+        if(loader.contains('TriggerAfterUpdateAsyncTestMicroTrigger') == false ||
+            loader.getMicroTrigger('TriggerAfterUpdateAsyncTestMicroTrigger').containsAction('TriggerAfterUpdateTest.MockAsyncAction') == false
+        )
+            return;
+
+        // Load and Disable All MicroTriggers except the "TriggerAfterUpdateTestMicroTrigger".
+        for(BaseMicroTrigger currentMicroTrigger :loader.getMicroTriggers()) {
+            if(currentMicroTrigger.DeveloperName != 'TriggerAfterUpdateAsyncTestMicroTrigger')
+                currentMicroTrigger.deactivate();
+        }
+        // Test the MicroTrigger by inserting a record that does not meet the Criteria
+        MicroTriggerTestingMock__c microTriggerSObjectMock = new MicroTriggerTestingMock__c(
+            Name = INVALID_CRITERIA
+        );
+        insert microTriggerSObjectMock;
+        // Then update it to meet the criteria.
+        // The record will meet the criteria, because we update the Name field to a valid value
+        microTriggerSObjectMock.Name = VALID_CRITERIA;
+        Test.startTest();
+        update microTriggerSObjectMock;
+        Test.stopTest();
+        
+        // Check if a duplicate record is created
+        List<MicroTriggerTestingMock__c> duplicateRecord = [
+            SELECT Name FROM MicroTriggerTestingMock__c
+            WHERE Id != :microTriggerSObjectMock.Id
+        ];
+        System.assertEquals(1, duplicateRecord.size(),'A new record (async) should be created');
+        System.assertEquals(microTriggerSObjectMock.Name + ' (ASYNC)', duplicateRecord[0].Name, 'The new record Name should have " ASYNC" appended');
+    }
     
     /*******************************************************************************************************
     * @descripton The MockCriteria filters the updated records to get only the records
@@ -182,6 +219,25 @@ private class TriggerAfterUpdateTest {
                 newRecordsToInsert.add(
                     new MicroTriggerTestingMock__c (
                         Name = currentMicroTriggerTestingMock.Name + ' (DUPLICATE)'
+                    )
+                );
+            }
+            insert newRecordsToInsert;
+            return true;
+        }
+    }
+
+    /*******************************************************************************************************
+    * @descripton MockAsyncAction takes all the filtered records that have Name equal to VALID_CRITERIA
+    * (from the MockCriteria) and creates a duplicate for each filtered records.
+    ********************************************************************************************************/
+    public class MockAsyncAction implements TriggerAfterUpdate.Action {
+        public Boolean run(TriggerAfterUpdate.Context context, List<MicroTriggerTestingMock__c> scope) {
+            List<MicroTriggerTestingMock__c> newRecordsToInsert = new List<MicroTriggerTestingMock__c>();
+            for(MicroTriggerTestingMock__c currentMicroTriggerTestingMock : scope) {
+                newRecordsToInsert.add(
+                    new MicroTriggerTestingMock__c (
+                        Name = currentMicroTriggerTestingMock.Name + ' (ASYNC)'
                     )
                 );
             }

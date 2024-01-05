@@ -150,6 +150,40 @@ private class TriggerAfterInsertTest {
         System.assertEquals(microTriggerSObjectMock.Name + ' (DUPLICATE)', duplicateRecord[0].Name, 'The new record Name should have " DUPLICATE" appended');
     }
 
+    /**************************************************************************************************************************
+    @description Tests the After Insert MicroTrigger logic with a valid Criteria, using the real MicroTrigger Configuration.
+    verify: The Criteria should be met and the Action should run.
+    ***************************************************************************************************************************/
+    @isTest static void testAsyncMicroTriggerWithValidCriteria() {
+        MicroTriggersLoader loader = MicroTriggersLoader.getInstance();
+        if(loader.contains('TriggerAfterInsertAsyncTestMicroTrigger') == false ||
+            loader.getMicroTrigger('TriggerAfterInsertAsyncTestMicroTrigger').containsAction('TriggerAfterInsertTest.MockAsyncAction') == false
+        )
+            return;
+
+        // Load and Disable All MicroTriggers except the "TriggerAfterInsertTestMicroTrigger".
+        for(BaseMicroTrigger currentMicroTrigger :loader.getMicroTriggers()) {
+            if(currentMicroTrigger.DeveloperName != 'TriggerAfterInsertAsyncTestMicroTrigger')
+                currentMicroTrigger.deactivate();
+        }
+
+        // Test the MicroTrigger by inserting a record that will meet the Criteria.
+        MicroTriggerTestingMock__c microTriggerSObjectMock = new MicroTriggerTestingMock__c(
+            Name = VALID_CRITERIA
+        );
+        Test.startTest();
+        insert microTriggerSObjectMock;
+        Test.stopTest();
+
+        // Check if a duplicate record is created
+        List<MicroTriggerTestingMock__c> duplicateRecord = [
+            SELECT Name FROM MicroTriggerTestingMock__c
+            WHERE Id != :microTriggerSObjectMock.Id
+        ];
+        System.assertEquals(1, duplicateRecord.size(),'A new record (duplicate) should be created');
+        System.assertEquals(microTriggerSObjectMock.Name + ' (ASYNC)', duplicateRecord[0].Name, 'The new record Name should have " ASYNC" appended');
+    }
+
     /*******************************************************************************************************
     * @descripton The MockCriteria filters the inserted records to get only the records
     * that have the Name equal to VALID_CRITERIA (TEST RECORD).
@@ -176,6 +210,25 @@ private class TriggerAfterInsertTest {
                 newRecordsToInsert.add(
                     new MicroTriggerTestingMock__c (
                         Name = currentMicroTriggerTestingMock.Name + ' (DUPLICATE)'
+                    )
+                );
+            }
+            insert newRecordsToInsert;
+            return true;
+        }
+    }
+
+    /*******************************************************************************************************
+    * @descripton MockAsyncAction takes all the filtered records that have Name equal to VALID_CRITERIA
+    * (from the MockCriteria) and creates a duplicate for each filtered records.
+    ********************************************************************************************************/
+    public class MockAsyncAction implements TriggerAfterInsert.Action {
+        public Boolean run(TriggerAfterInsert.Context context, List<MicroTriggerTestingMock__c> scope) {
+            List<MicroTriggerTestingMock__c> newRecordsToInsert = new List<MicroTriggerTestingMock__c>();
+            for(MicroTriggerTestingMock__c currentMicroTriggerTestingMock :scope) {
+                newRecordsToInsert.add(
+                    new MicroTriggerTestingMock__c (
+                        Name = currentMicroTriggerTestingMock.Name + ' (ASYNC)'
                     )
                 );
             }

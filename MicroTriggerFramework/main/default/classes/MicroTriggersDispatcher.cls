@@ -36,7 +36,7 @@ public class MicroTriggersDispatcher {
     }
 
     /*******************************************************************************************************
-    * @description Gets and runs the appropriates MicroTriggers.
+    * @description Performs the synchronous dispatching available with the framework OOTB
     ********************************************************************************************************/
     public void dispatch(String triggerName) {
         MicroTriggerLogging.LogEvent triggerLogEvent = new MicroTriggerLogging.LogEvent(triggerName, 'Trigger');
@@ -52,6 +52,35 @@ public class MicroTriggersDispatcher {
         }
 
         MicroTriggerLogging.emitLogCompleted(triggerLogEvent);
+    }
+
+    /*******************************************************************************************************
+    * @description Performs the asynchronous dispatching as part of the async microtrigger addition
+    ********************************************************************************************************/
+    public void dispatchAsync(MicroTriggerAsyncEvent microTriggerAsyncEvent) {
+        Map<String, List<SObject>> actionContext = microTriggerAsyncEvent.getActionContextMap;
+
+        for (String actionClass : actionContext.keySet()) {
+            MicroTriggerLogging.LogEvent actionLogEvent = new MicroTriggerLogging.LogEvent(actionClass, 'Action');
+            MicroTriggerLogging.emitLogStarted(actionLogEvent);
+
+            List<SObject> qualifiedRecords = actionContext.get(actionClass);
+
+            switch on microTriggerAsyncEvent.event {
+                when AFTER_INSERT {
+                    TriggerAfterInsert.Context context = microTriggerAsyncEvent.getAfterInsertContext;
+                    TriggerAfterInsert.Action currentAction = (TriggerAfterInsert.Action) Type.forName(actionClass).newInstance();
+                    currentAction.run(context, qualifiedRecords);
+                }
+                when AFTER_UPDATE {
+                    TriggerAfterUpdate.Context context = microTriggerAsyncEvent.getAfterUpdateContext;
+                    TriggerAfterUpdate.Action currentAction = (TriggerAfterUpdate.Action) Type.forName(actionClass).newInstance();
+                    currentAction.run(context, qualifiedRecords);
+                }
+            }
+            
+            MicroTriggerLogging.emitLogCompleted(actionLogEvent);
+        }
     }
     
     /*******************************************************************************************************

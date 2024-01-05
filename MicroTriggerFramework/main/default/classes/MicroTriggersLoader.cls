@@ -209,7 +209,7 @@ public class MicroTriggersLoader {
         return [
             SELECT DeveloperName, Active__c, SObject__c, Event__c, Criteria__c, PreventRecursive__c,
                 (
-                    SELECT Active__c, ApexClass__c, OrderOfExecution__c
+                    SELECT Active__c, ApexClass__c, OrderOfExecution__c, Is_Async__c
                     FROM MicroTriggerActions__r
                     WHERE Active__c = true
                 )
@@ -247,7 +247,7 @@ public class MicroTriggersLoader {
         List<MicroTriggerAction__mdt> sortedActions = getSortedActions(customMetadataType.MicroTriggerActions__r);
         for(MicroTriggerAction__mdt actionCustomMetadataType :sortedActions) {
             if(String.isNotBlank(actionCustomMetadataType.ApexClass__c))
-                currentMicroTrigger.addAction(actionCustomMetadataType.ApexClass__c);
+                currentMicroTrigger.addAction(actionCustomMetadataType.ApexClass__c, actionCustomMetadataType.Is_Async__c);
         }
         if(customMetadataType.PreventRecursive__c)
             currentMicroTrigger.preventRecursive();

@@ -28,7 +28,7 @@ public abstract class BaseMicroTrigger {
     public Boolean IsActive {get; private set;}
 
     private String criteriaClass;
-    private List<String> actionsClasses;
+    private Map<String, Boolean> actionClassesToIsAsyncMap;
     private MicroTriggerLogging.LogEvent microTriggerLogEvent;
 
     /*******************************************************************************************************
@@ -42,7 +42,7 @@ public abstract class BaseMicroTrigger {
         Recursive = true;
         IsActive = true;
         criteriaClass = '';
-        actionsClasses = new List<String>();
+        actionClassesToIsAsyncMap = new Map<String, Boolean>();
     }
 
     /*******************************************************************************************************
@@ -56,16 +56,27 @@ public abstract class BaseMicroTrigger {
     }
 
     /*******************************************************************************************************
-    * @description Adds an Action for this MicroTrigger. Throws an error if the Action class doesnt exist.
+    * @description Adds an Action for this MicroTrigger (defaults isAsync to false). 
+    * Throws an error if the Action class doesnt exist.
     * @param String the class name of the Action class.
     * @return BaseMicroTrigger.
     ********************************************************************************************************/
     public BaseMicroTrigger addAction(String actionClass) {
+        return addAction(actionClass, false);
+    }
+
+    /*******************************************************************************************************
+    * @description Adds an Action for this MicroTrigger. Throws an error if the Action class doesnt exist.
+    * @param String the class name of the Action class.
+    * @param Boolean whether the action should run asynchronously
+    * @return BaseMicroTrigger.
+    ********************************************************************************************************/
+    public BaseMicroTrigger addAction(String actionClass, Boolean isAsync) {
         System.assert(
             String.isNotBlank(actionClass) || Type.forName(actionClass) != null,
             'ERROR MicroTrigger "' + this.DeveloperName + '" Invalid Action Class "' + actionClass + '"'
         );
-        actionsClasses.add(actionClass);
+        actionClassesToIsAsyncMap.put(actionClass, isAsync);
         return this;
     }
 
@@ -75,7 +86,7 @@ public abstract class BaseMicroTrigger {
     * @return Boolean value indicating whether the given Action class is in the Action class list.
     ********************************************************************************************************/
     public Boolean containsAction(String actionClass) {
-        return (new Set<String>(actionsClasses)).contains(actionClass);
+        return actionClassesToIsAsyncMap.containsKey(actionClass);
     }
 
     /*******************************************************************************************************
@@ -146,18 +157,40 @@ public abstract class BaseMicroTrigger {
         if(Recursive == false) {
             this.deactivate();
         }
+
+        // Create variable to hold MicroTriggerAsyncEvent
+        MicroTriggerAsyncEvent microTriggerAsyncEvent;
+
         // Run each of the action classes and then return reult.
-        for(String actionClass :actionsClasses) {
+        for(String actionClass :actionClassesToIsAsyncMap.keySet()) {
             MicroTriggerLogging.LogEvent actionLogEvent = new MicroTriggerLogging.LogEvent(actionClass, 'Action');
             MicroTriggerLogging.emitLogStarted(actionLogEvent);
+            Boolean isAsync = actionClassesToIsAsyncMap.get(actionClass);
             
-            Boolean success = runAction(actionClass, qualifiedRecords);
-            if(success) {
-                result.SuccessActions.add(actionClass);
+            if (!isAsync) {
+                Boolean success = runAction(actionClass, qualifiedRecords);
+                if(success) {
+                    result.SuccessActions.add(actionClass);
+                }
+                else {
+                    result.FailActions.add(actionClass);
+                }
+            } else {
+                switch on Trigger.operationType {
+                    when AFTER_INSERT {
+                        microTriggerAsyncEvent = microTriggerAsyncEvent == null ? new MicroTriggerAsyncEvent(this.DeveloperName, this.SObjectName, new TriggerAfterInsert.Context()) : microTriggerAsyncEvent;
+                    }
+                    when AFTER_UPDATE {
+                        microTriggerAsyncEvent = microTriggerAsyncEvent == null ? new MicroTriggerAsyncEvent(this.DeveloperName, this.SObjectName, new TriggerAfterUpdate.Context()) : microTriggerAsyncEvent;
+                    }
+                }
+                microTriggerAsyncEvent.putActionContext(actionClass, qualifiedRecords);
             }
-            else {
-                result.FailActions.add(actionClass);
+
+            if (microTriggerAsyncEvent != null) {
+                EventBus.publish(microTriggerAsyncEvent.toPlatformEvent());
             }
+
             MicroTriggerLogging.emitLogCompleted(actionLogEvent);
         }
 

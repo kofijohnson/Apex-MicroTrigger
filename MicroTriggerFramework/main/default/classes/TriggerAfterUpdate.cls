@@ -76,6 +76,18 @@ public class TriggerAfterUpdate {
             oldMap = Trigger.oldMap;
             size = Trigger.size;
         }
+
+        /*******************************************************************************************************
+        * @description After Update Context Async Constructor.
+        ********************************************************************************************************/
+        public Context(List<SObject> triggerNew, Map<Id, SObject> triggerNewMap, List<SObject> triggerOld, Map<Id, SObject> triggerOldMap, Integer triggerSize) {
+            isExecuting = true;
+            newList = triggerNew;
+            newMap = triggerNewMap;
+            oldList = triggerOld;
+            oldMap = triggerOldMap;
+            size = triggerSize;
+        }
     }
 
     /*******************************************************************************************************

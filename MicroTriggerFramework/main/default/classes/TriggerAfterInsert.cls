@@ -71,6 +71,16 @@ public class TriggerAfterInsert {
             newMap = Trigger.newMap;
             size = Trigger.size;
         }
+
+        /*******************************************************************************************************
+        * @description After Insert Context Async Constructor.
+        ********************************************************************************************************/
+        public Context(List<SObject> newList, Map<Id, SObject> newMap, Integer size) {
+            isExecuting = true;
+            this.newList = newList;
+            this.newMap = newMap;
+            this.size = size;
+        }
     }
 
     /*******************************************************************************************************

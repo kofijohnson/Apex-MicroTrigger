@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>104904 A platform event emitted when the MicroTrigger Custom Metadata type has Is_Async__c true</description>
+    <eventType>HighVolume</eventType>
+    <label>MicroTrigger Async Event</label>
+    <pluralLabel>MicroTrigger Async Events</pluralLabel>
+    <publishBehavior>PublishAfterCommit</publishBehavior>
+</CustomObject>
